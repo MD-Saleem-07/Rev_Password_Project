@@ -1,32 +1,28 @@
-🔐 Rev Password Manager
+```md
+# 🔐 Rev Password Manager
 
-A Java Console-Based Password Management System that allows users to securely store, manage, and retrieve passwords using JDBC, Oracle DB, hashing, logging, and exception handling.
+Rev Password Manager is a **Java-based console application** designed to securely store, manage, and retrieve user credentials.  
+The application focuses on **backend development**, emphasizing secure data handling, database interaction, logging, and structured exception management using **Java, JDBC, and Oracle Database**.
 
-This project demonstrates real-world backend development concepts such as:
-	•	DAO Architecture
-	•	Exception Handling
-	•	Secure Password Storage
-	•	Logging
-	•	Input Validation
-	•	JDBC Connectivity
-	•	Modular Code Design
+---
 
-⸻
+## 📌 Project Objective
 
-📌 Project Objective
+The objective of this project is to develop a secure password management system that:
 
-The goal of this project is to build a secure password manager that:
-	•	Allows users to register and login
-	•	Stores passwords safely
-	•	Uses hashing for security
-	•	Handles invalid inputs gracefully
-	•	Uses logging for monitoring
-	•	Implements database connectivity properly
-	•	Follows clean architecture
+- Allows users to register and authenticate securely  
+- Stores sensitive data in an encrypted format  
+- Validates user input and handles runtime errors gracefully  
+- Logs application activity for monitoring and debugging  
+- Follows a clean, modular, and maintainable architecture  
 
-⸻
+---
 
-🧱 Project Structure
+## 🧱 Project Structure
+
+The application is organized using a **layered architecture**, ensuring clear separation of concerns.
+
+```
 
 com.rev
 │
@@ -55,149 +51,112 @@ com.rev
 │   └── PasswordDaoTest.java
 │
 └── resources
-    └── logging configuration
+└── Logging configuration
 
+````
 
-⸻
+---
 
-⚙️ Technologies Used
+## ⚙️ Technologies Used
 
-Technology	Purpose
-Java	Core programming
-JDBC	Database connectivity
-Oracle DB	Data storage
-JUnit	Testing
-SHA-256	Password hashing
-Logger	Logging user actions
-Exception Handling	Input validation
+| Technology | Purpose |
+|----------|---------|
+| Java | Core application logic |
+| JDBC | Database connectivity |
+| Oracle Database | Persistent data storage |
+| JUnit | Unit testing |
+| SHA-256 | Password hashing |
+| Logger | Application logging |
+| Exception Handling | Input validation and error control |
 
+---
 
-⸻
+## 🔁 Application Flow
 
-🔁 Application Flow
+### Application Start
+The user is presented with the following options:
+1. Register  
+2. Login  
+3. Exit  
 
-Step 1: Application Start
+### Registration
+The user provides:
+- Name  
+- Email  
+- Password  
+- Security Question  
+- Security Answer  
 
-User sees:
+The password is encrypted using SHA-256 and stored securely in the database.
 
-1. Register
-2. Login
-3. Exit
+### Login
+The user enters:
+- Email  
+- Password  
 
+The hashed password is compared with the stored value to authenticate the user.
 
-⸻
+### Post-Login Operations
+After successful login, the user can:
+- Add new passwords  
+- View stored passwords (with master verification)  
+- Update or delete passwords  
+- Recover forgotten passwords  
+- Generate strong passwords  
+- Update profile details  
 
-Step 2: Registration Flow
+---
 
-User enters:
-	•	User ID
-	•	Name
-	•	Email
-	•	Password
-	•	Security Question
-	•	Security Answer
+## 🔐 Security Features
 
-✔ Password is hashed
-✔ Data is stored in DB
-✔ Logs are created
+- **Password Hashing:** All passwords are stored in encrypted format  
+- **Master Password Verification:** Required before accessing sensitive data  
+- **Verification Code:** Used during password recovery  
+- **Logging:** All critical actions are logged  
 
-⸻
+---
 
-Step 3: Login Flow
+## 🧠 Exception Handling
 
-User enters:
-	•	Email
-	•	Password
+A custom exception, **InvalidInputException**, is used to handle invalid menu choices and incorrect input formats.
 
-✔ Password is hashed
-✔ Compared with DB
-✔ Login allowed only if matched
+Handled exceptions include:
+- InputMismatchException  
+- SQLException  
+- NullPointerException  
+- Custom validation exceptions  
 
-⸻
+---
 
-Step 4: After Login Menu
+## 🗃️ Database Design
 
-1. Add Password
-2. View Passwords
-3. View Password (Master Check)
-4. Update Password
-5. Update Profile
-6. Forgot Password
-7. Generate Password
-8. Delete Password
-9. Logout
+### USERS Table
 
+| Column | Description |
+|------|-------------|
+| user_id | Primary key |
+| name | User name |
+| email | Login email |
+| password | Hashed password |
+| security_question | Recovery question |
+| security_answer | Recovery answer |
 
-⸻
+### PASSWORDS Table
 
-🔐 Security Features
+| Column | Description |
+|------|-------------|
+| password_id | Primary key |
+| user_id | Foreign key |
+| account_name | Account name |
+| username | Account username |
+| password | Stored password |
 
-✅ Password Hashing
+---
 
-All passwords are encrypted using SHA-256 before storing.
+## 🗂️ Entity Relationship (ER) Diagram
 
-✅ Master Password Verification
-
-Before viewing passwords, user must re-enter password.
-
-✅ Verification Code
-
-Used during password reset.
-
-✅ Logging
-
-All operations are logged using java.util.logging.
-
-⸻
-
-🧠 Exception Handling
-
-Custom Exception:
-
-InvalidInputException
-
-Used when:
-	•	User enters characters instead of numbers
-	•	Invalid menu options
-	•	Wrong input format
-
-Handled Exceptions:
-
-Exception	Reason
-InputMismatchException	Non-numeric input
-SQLException	DB issues
-NullPointerException	Connection issues
-Custom Exception	Invalid user input
-
-
-⸻
-
-🗃️ Database Design
-
-USERS TABLE
-
-Column	Description
-user_id	Primary key
-name	User name
-email	Login email
-password	Hashed password
-security_question	Recovery question
-security_answer	Recovery answer
-
-PASSWORDS TABLE
-
-Column	Description
-password_id	Primary key
-user_id	Foreign key
-account_name	Gmail, Facebook
-username	Account username
-password	Stored password
-
-
-⸻
-
+```mermaid
 erDiagram
-
     USERS {
         int user_id PK
         string name
@@ -216,107 +175,86 @@ erDiagram
     }
 
     USERS ||--o{ PASSWORDS : stores
-⸻
+````
 
-🧪 Testing
+---
 
-JUnit tests are written for:
-	•	UserDao
-	•	PasswordDao
+## 🧪 Testing
+
+JUnit tests are implemented for:
+
+* User authentication
+* Password management operations
 
 Example:
 
+```java
 @Test
 public void testLogin() {
     assertNotNull(dao.login("user@gmail.com", "123"));
 }
+```
 
-✔ No UI dependency
-✔ Safe database tests
-✔ Proper assertions
+---
 
-⸻
+## 📜 Logging
 
-📜 Logging
+All application events are recorded in:
 
-Logs are stored in:
-
+```
 /logs/app.log
+```
 
-Example:
+Example log entries include login attempts, successful operations, and database errors.
 
-INFO: Login attempt for email
-INFO: Login successful
-SEVERE: Database connection failed
+---
 
+## ⚠️ Common Error Explanation
 
-⸻
+**ORA-12519** is a database-related issue caused by listener or connection limitations and is not related to application logic.
 
-⚠️ Common Error Explained
+---
 
-ORA-12519 Error
+## ✅ Features Implemented
 
-❌ This is not a code error
-✔ It is an Oracle DB issue
+* User Registration
+* Secure Login
+* Password Encryption
+* Password Management
+* Master Password Validation
+* Password Recovery
+* Logging
+* Exception Handling
+* Database Connectivity
+* Modular Code Design
 
-Reason:
-	•	Oracle listener is down
-	•	Too many connections
-	•	DB service not started
+---
 
-Fix:
+## 📌 How to Run
 
-1. Open SQL Plus
-2. Run: lsnrctl start
-3. Restart Oracle service
+1. Import the project into STS or Eclipse
+2. Add the Oracle JDBC driver
+3. Configure database details in `DBUtil.java`
+4. Run `MainApp.java`
+5. Use the console menu to interact
 
+---
 
-⸻
+## 🧠 Learning Outcomes
 
-✅ Features Implemented
+* JDBC connection management
+* Secure password storage
+* DAO-based architecture
+* Exception-driven validation
+* Logging and debugging
+* Real-world backend application design
 
-✔ User Registration
-✔ Login Authentication
-✔ Password Encryption
-✔ Password Management
-✔ Master Password Validation
-✔ Forgot Password
-✔ Logging
-✔ Exception Handling
-✔ Database Connectivity
-✔ Input Validation
-✔ Modular Code
+---
 
-⸻
+## 📌 Final Note
 
-📌 How to Run
-	1.	Import project into STS / Eclipse
-	2.	Add Oracle JDBC driver
-	3.	Configure DB in DBUtil.java
-	4.	Run MainApp.java
-	5.	Use console menu
+Rev Password Manager is a **secure, structured, and backend-focused Java application** that demonstrates practical implementation of industry-standard development practices.
 
-⸻
-
-🧠 Learning Outcomes
-
-✔ JDBC connection handling
-✔ Exception management
-✔ Secure password storage
-✔ Layered architecture
-✔ Clean coding practices
-✔ Logging & debugging
-✔ Real-world backend logic
-
-⸻
-
-📌 Final Note
-
-This project is:
-	•	Fully functional
-	•	Well-structured
-	•	Secure
-	•	Industry-aligned
-	•	Interview ready
-
-⸻
+```
+::contentReference[oaicite:0]{index=0}
+```
