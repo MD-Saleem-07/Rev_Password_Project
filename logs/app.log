@@ -1,0 +1,54 @@
+Jan 28, 2026 9:30:54 PM com.rev.dao.UserDao registerUser
+INFO: Register method started
+Jan 28, 2026 9:30:56 PM com.rev.dao.UserDao registerUser
+SEVERE: Error in registration: ORA-00001: unique constraint (REVUSER.SYS_C004002) violated
+
+https://docs.oracle.com/error-help/db/ora-00001/
+Jan 29, 2026 9:52:44 AM com.rev.dao.UserDao login
+INFO: Login attempt for email: chapati@gmail.com
+Jan 29, 2026 9:52:45 AM com.rev.dao.UserDao login
+INFO: Login successful for: chapati@gmail.com
+Jan 29, 2026 9:52:45 AM com.rev.dao.UserDao forgotPassword
+INFO: Forgot password request for: chapati@gmail.com
+Jan 29, 2026 9:52:46 AM com.rev.dao.UserDao forgotPassword
+INFO: Forgot password result: true
+Jan 29, 2026 9:52:46 AM com.rev.dao.UserDao login
+INFO: Login attempt for email: chapati@gmail.com
+Jan 29, 2026 9:52:46 AM com.rev.dao.UserDao verifyMasterPassword
+INFO: Verifying master password for userId: 786
+Jan 29, 2026 9:55:32 AM com.rev.dao.UserDao registerUser
+INFO: Register method started
+Jan 29, 2026 9:55:34 AM com.rev.dao.UserDao registerUser
+INFO: User registered successfully
+Jan 29, 2026 9:55:34 AM com.rev.dao.UserDao login
+INFO: Login attempt for email: chapati@gmail.com
+Jan 29, 2026 9:55:34 AM com.rev.dao.UserDao login
+INFO: Login successful for: chapati@gmail.com
+Jan 29, 2026 9:55:34 AM com.rev.dao.UserDao forgotPassword
+INFO: Forgot password request for: chapati@gmail.com
+Jan 29, 2026 9:55:34 AM com.rev.dao.UserDao forgotPassword
+INFO: Forgot password result: true
+Jan 29, 2026 9:55:34 AM com.rev.dao.UserDao login
+INFO: Login attempt for email: chapati@gmail.com
+Jan 29, 2026 9:55:34 AM com.rev.dao.UserDao updateProfile
+INFO: Updating profile for userId: 786
+Jan 29, 2026 9:55:35 AM com.rev.dao.UserDao updateProfile
+INFO: Profile updated: true
+Jan 29, 2026 9:55:35 AM com.rev.dao.UserDao login
+INFO: Login attempt for email: invalid@gmail.com
+Jan 29, 2026 9:55:35 AM com.rev.dao.UserDao resetPassword
+INFO: Reset password attempt for: chapati@gmail.com
+Jan 29, 2026 9:55:35 AM com.rev.dao.UserDao resetPassword
+INFO: Password reset result: false
+Jan 29, 2026 9:55:35 AM com.rev.dao.UserDao verifyMasterPassword
+INFO: Verifying master password for userId: 786
+Jan 29, 2026 9:55:35 AM com.rev.dao.UserDao verifyMasterPassword
+INFO: Verifying master password for userId: 786
+Jan 29, 2026 11:53:06 AM com.rev.dao.UserDao login
+INFO: Login attempt for email: sagar@gmail.com
+Jan 29, 2026 11:53:08 AM com.rev.dao.UserDao login
+INFO: Login successful for: sagar@gmail.com
+Jan 29, 2026 11:54:11 AM com.rev.dao.UserDao login
+INFO: Login attempt for email: sagar@gmail.com
+Jan 29, 2026 11:54:12 AM com.rev.dao.UserDao login
+INFO: Login successful for: sagar@gmail.com
