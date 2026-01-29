@@ -11,7 +11,14 @@ import com.rev.model.User;
 import com.rev.util.PasswordUtil;
 import com.rev.util.VerificationUtil;
 
+@SuppressWarnings("unused")
 public class MainApp {
+
+    // ✅ EMAIL VALIDATION METHOD (ONLY ADDITION)
+    private static boolean isValidEmail(String email) {
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        return email != null && email.matches(regex);
+    }
 
     public static void main(String[] args) {
 
@@ -28,6 +35,7 @@ public class MainApp {
                 System.out.print("Enter choice: ");
 
                 int choice = sc.nextInt();
+                sc.nextLine();
 
                 // ================= REGISTER =================
                 if (choice == 1) {
@@ -36,21 +44,30 @@ public class MainApp {
 
                     System.out.print("User ID: ");
                     u.setUserId(sc.nextInt());
+                    sc.nextLine();
 
                     System.out.print("Name: ");
-                    u.setName(sc.next());
+                    u.setName(sc.nextLine());
 
                     System.out.print("Email: ");
-                    u.setEmail(sc.next());
+                    String email = sc.nextLine();
+
+                    // ✅ EMAIL VALIDATION
+                    if (!isValidEmail(email)) {
+                        System.out.println("❌ Invalid email format! Example: user@gmail.com");
+                        continue;
+                    }
+
+                    u.setEmail(email);
 
                     System.out.print("Password: ");
-                    u.setPassword(sc.next());
+                    u.setPassword(sc.nextLine());
 
                     System.out.print("Security Question: ");
-                    u.setSecurityQuestion(sc.next());
+                    u.setSecurityQuestion(sc.nextLine());
 
                     System.out.print("Security Answer: ");
-                    u.setSecurityAnswer(sc.next());
+                    u.setSecurityAnswer(sc.nextLine());
 
                     if (userDao.registerUser(u))
                         System.out.println("✅ Registration Successful");
@@ -62,10 +79,16 @@ public class MainApp {
                 else if (choice == 2) {
 
                     System.out.print("Email: ");
-                    String email = sc.next();
+                    String email = sc.nextLine();
+
+                    // ✅ EMAIL VALIDATION
+                    if (!isValidEmail(email)) {
+                        System.out.println("❌ Invalid email format! Example: user@gmail.com");
+                        continue;
+                    }
 
                     System.out.print("Password: ");
-                    String password = sc.next();
+                    String password = sc.nextLine();
 
                     if (userDao.login(email, password)) {
 
@@ -86,24 +109,27 @@ public class MainApp {
                                 System.out.println("9. Logout");
 
                                 int ch = sc.nextInt();
+                                sc.nextLine();
 
                                 if (ch == 1) {
                                     PasswordEntry p = new PasswordEntry();
 
                                     System.out.print("Password ID: ");
                                     p.setPasswordId(sc.nextInt());
+                                    sc.nextLine();
 
                                     System.out.print("User ID: ");
                                     p.setUserId(sc.nextInt());
+                                    sc.nextLine();
 
                                     System.out.print("Account Name: ");
-                                    p.setAccountName(sc.next());
+                                    p.setAccountName(sc.nextLine());
 
                                     System.out.print("Username: ");
-                                    p.setUsername(sc.next());
+                                    p.setUsername(sc.nextLine());
 
                                     System.out.print("Password: ");
-                                    p.setPassword(sc.next());
+                                    p.setPassword(sc.nextLine());
 
                                     passDao.addPassword(p);
                                     System.out.println("✅ Password Added");
@@ -147,6 +173,11 @@ public class MainApp {
 
                                     System.out.print("New Email: ");
                                     String mail = sc.next();
+
+                                    if (!isValidEmail(mail)) {
+                                        System.out.println("❌ Invalid email format!");
+                                        continue;
+                                    }
 
                                     userDao.updateProfile(uid, name, mail);
                                     System.out.println("✅ Profile Updated");
@@ -197,7 +228,7 @@ public class MainApp {
 
                             } catch (InputMismatchException e) {
                                 System.out.println("❌ Please enter numbers only!");
-                                sc.nextLine(); // clear buffer
+                                sc.nextLine();
                             }
                         }
 
@@ -216,8 +247,8 @@ public class MainApp {
                 }
 
             } catch (InputMismatchException e) {
-                System.out.println("❌ Please enter a valid number!");
-                sc.nextLine(); // clear buffer
+                System.out.println("❌ Please enter valid number!");
+                sc.nextLine();
             }
         }
     }

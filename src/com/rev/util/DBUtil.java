@@ -14,8 +14,8 @@ public class DBUtil {
 
                 con = DriverManager.getConnection(
                         "jdbc:oracle:thin:@localhost:1521:xe",
-                        "YOUR_DB_USERNAME",
-                        "YOUR_DB_PASSWORD"
+                        "revuser",
+                        "rev123"
                 );
             }
         } catch (Exception e) {
