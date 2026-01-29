@@ -98,7 +98,7 @@ public class UserDao {
              PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setInt(1, userId);
-            ps.setString(2, password);
+            ps.setString(2, HashUtil.hash(password));
 
             return ps.executeQuery().next();
 
