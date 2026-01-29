@@ -174,16 +174,24 @@ After login:
 
 ## 🔷 ER Diagram (Conceptual)
 
-+———––+        +––––––––+
-|   USERS     |        |   PASSWORDS    |
-+———––+        +––––––––+
-| user_id (PK)| <––  | password_id    |
-| name        |        | user_id (FK)   |
-| email       |        | account_name   |
-| password    |        | username       |
-| sec_question|        | password       |
-| sec_answer  |        +––––––––+
-+———––+
+erDiagram
+    USERS {
+        int user_id PK
+        string name
+        string email
+        string username
+    }
+
+    PASSWORDS {
+        int password_id PK
+        int user_id FK
+        string account_name
+        string password
+        string sec_question
+        string sec_answer
+    }
+
+    USERS ||--o{ PASSWORDS : stores
 
 ---
 
