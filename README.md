@@ -196,28 +196,26 @@ password	Stored password
 
 ⸻
 
-🧩 ER Diagram (Conceptual)
+erDiagram
 
-USERS ||---o{ PASSWORDS
+    USERS {
+        int user_id PK
+        string name
+        string email
+        string password
+        string security_question
+        string security_answer
+    }
 
-USERS
------------
-user_id (PK)
-name
-email
-password
-security_question
-security_answer
+    PASSWORDS {
+        int password_id PK
+        int user_id FK
+        string account_name
+        string username
+        string password
+    }
 
-PASSWORDS
------------
-password_id (PK)
-user_id (FK)
-account_name
-username
-password
-
-
+    USERS ||--o{ PASSWORDS : stores
 ⸻
 
 🧪 Testing
