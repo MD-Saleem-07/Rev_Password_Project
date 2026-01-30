@@ -72,3 +72,5 @@ Jan 29, 2026 3:54:06 PM com.rev.dao.UserDao registerUser
 INFO: Register method started
 Jan 29, 2026 3:54:06 PM com.rev.dao.UserDao registerUser
 SEVERE: Register failed: Cannot invoke "java.sql.Connection.prepareStatement(String)" because "con" is null
+Jan 30, 2026 9:49:26 AM com.rev.dao.UserDao login
+INFO: Login attempt for email: user1@gmail.com

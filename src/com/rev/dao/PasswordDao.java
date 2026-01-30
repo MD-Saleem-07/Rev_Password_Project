@@ -3,6 +3,7 @@ package com.rev.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import com.rev.model.PasswordEntry;
 import com.rev.util.DBUtil;
@@ -10,27 +11,29 @@ import com.rev.util.DBUtil;
 public class PasswordDao {
 
     // Add Password
-    public boolean addPassword(PasswordEntry p) {
-        try {
-            Connection con = DBUtil.getConnection();
+	public boolean addPassword(PasswordEntry p) {
+	    String sql = "INSERT INTO passwords VALUES (?, ?, ?, ?, ?)";
 
-            String sql = "INSERT INTO passwords VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement ps = con.prepareStatement(sql);
+	    try (Connection con = DBUtil.getConnection();
+	         PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setInt(1, p.getPasswordId());
-            ps.setInt(2, p.getUserId());
-            ps.setString(3, p.getAccountName());
-            ps.setString(4, p.getUsername());
-            ps.setString(5, p.getPassword());
+	        ps.setInt(1, p.getPasswordId());
+	        ps.setInt(2, p.getUserId());
+	        ps.setString(3, p.getAccountName());
+	        ps.setString(4, p.getUsername());
+	        ps.setString(5, p.getPassword());
 
-            return ps.executeUpdate() > 0;
+	        return ps.executeUpdate() > 0;
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+	    } catch (SQLIntegrityConstraintViolationException e) {
+	        System.out.println("❌ Password ID already exists!");
+	        return false;
 
+	    } catch (Exception e) {
+	        System.out.println("❌ Error while adding password.");
+	        return false;
+	    }
+	}
     // View Passwords
     public void viewPasswords(int userId) {
         try {

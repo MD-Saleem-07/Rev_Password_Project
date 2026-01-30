@@ -48,11 +48,36 @@ public class UserDao {
             return false;
         }
     }
+ // Check if User ID already exists
+    public boolean isUserIdExists(int userId) {
+        String sql = "SELECT 1 FROM users WHERE user_id=?";
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            return ps.executeQuery().next();
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // Check if Email already exists
+    public boolean isEmailExists(String email) {
+        String sql = "SELECT 1 FROM users WHERE email=?";
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            return ps.executeQuery().next();
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     // LOGIN
     public boolean login(String email, String password) {
-        logger.info("Login attempt for email: " + email);
-
         String sql = "SELECT * FROM users WHERE email=? AND password=?";
 
         try (Connection con = DBUtil.getConnection();
@@ -61,15 +86,13 @@ public class UserDao {
             ps.setString(1, email);
             ps.setString(2, HashUtil.hash(password));
 
-            ResultSet rs = ps.executeQuery();
-            return rs.next();
+            return ps.executeQuery().next();
 
         } catch (Exception e) {
-            logger.severe("Login error: " + e.getMessage());
+            System.out.println("❌ Database connection failed!");
             return false;
         }
     }
-
     // UPDATE PROFILE
     public boolean updateProfile(int userId, String name, String email) {
 
