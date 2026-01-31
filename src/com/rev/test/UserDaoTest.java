@@ -9,7 +9,7 @@ import com.rev.util.HashUtil;
 
 public class UserDaoTest {
 
-    // ✅ 1. Test Login (Valid user)
+    //  1. Test Login (Valid user)
     @Test
     public void testLoginSuccess() {
         UserDao dao = new UserDao();
@@ -19,7 +19,7 @@ public class UserDaoTest {
         assertNotNull(result);
     }
 
-    // ✅ 2. Test Login with Wrong Password
+    //  2. Test Login with Wrong Password
     @Test
     public void testLoginFailure() {
         UserDao dao = new UserDao();
@@ -29,7 +29,7 @@ public class UserDaoTest {
         assertNotNull(result);
     }
 
-    // ✅ 3. Verify Master Password
+    //  3. Verify Master Password
     @Test
     public void testVerifyMasterPassword() {
         UserDao dao = new UserDao();
@@ -39,7 +39,7 @@ public class UserDaoTest {
         assertNotNull(result);
     }
 
-    // ✅ 4. Forgot Password (Safe Update)
+    //  4. Forgot Password (Safe Update)
     @Test
     public void testForgotPassword() {
         UserDao dao = new UserDao();
@@ -53,7 +53,7 @@ public class UserDaoTest {
         assertNotNull(result);
     }
 
-    // ✅ 5. Update Profile
+    //  5. Update Profile
     @Test
     public void testUpdateProfile() {
         UserDao dao = new UserDao();
@@ -67,7 +67,7 @@ public class UserDaoTest {
         assertNotNull(result);
     }
 
-    // ✅ 6. Register User (SAFE VERSION)
+    //  6. Register User (SAFE VERSION)
     // This avoids duplicate user ID
     @Test
     public void testRegisterUserSafe() {
@@ -86,7 +86,7 @@ public class UserDaoTest {
         assertNotNull(result);
     }
 
-    // ✅ 7. Login with Invalid Email
+    //  7. Login with Invalid Email
     @Test
     public void testLoginInvalidUser() {
         UserDao dao = new UserDao();
@@ -96,7 +96,7 @@ public class UserDaoTest {
         assertNotNull(result);
     }
 
-    // ✅ 8. Reset Password with Wrong Answer
+    //  8. Reset Password with Wrong Answer
     @Test
     public void testResetPasswordWrongAnswer() {
         UserDao dao = new UserDao();
@@ -110,7 +110,7 @@ public class UserDaoTest {
         assertNotNull(result);
     }
 
-    // ✅ 9. Verify Master Password - Wrong Case
+    //  9. Verify Master Password - Wrong Case
     @Test
     public void testVerifyMasterPasswordFail() {
         UserDao dao = new UserDao();

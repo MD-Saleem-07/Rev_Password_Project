@@ -1,8 +1,8 @@
 package com.rev.dao;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
@@ -15,17 +15,25 @@ public class UserDao {
 
     private static Logger logger = Logger.getLogger(UserDao.class.getName());
 
+    //  LOGGER SETUP 
     static {
         try {
+            File logDir = new File("logs");
+            if (!logDir.exists()) {
+                logDir.mkdir(); // create logs folder
+            }
+
             FileHandler fh = new FileHandler("logs/app.log", true);
             fh.setFormatter(new SimpleFormatter());
             logger.addHandler(fh);
+            logger.setUseParentHandlers(false);
+
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(" Logging setup failed: " + e.getMessage());
         }
     }
 
-    // REGISTER
+    // ================= REGISTER =================
     public boolean registerUser(User user) {
         logger.info("Register method started");
 
@@ -48,9 +56,11 @@ public class UserDao {
             return false;
         }
     }
- // Check if User ID already exists
+
+    // ================= CHECK USER ID =================
     public boolean isUserIdExists(int userId) {
         String sql = "SELECT 1 FROM users WHERE user_id=?";
+
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -62,9 +72,10 @@ public class UserDao {
         }
     }
 
-    // Check if Email already exists
+    // ================= CHECK EMAIL =================
     public boolean isEmailExists(String email) {
         String sql = "SELECT 1 FROM users WHERE email=?";
+
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -76,8 +87,10 @@ public class UserDao {
         }
     }
 
-    // LOGIN
+    // ================= LOGIN =================
     public boolean login(String email, String password) {
+        logger.info("Login attempt for email: " + email);
+
         String sql = "SELECT * FROM users WHERE email=? AND password=?";
 
         try (Connection con = DBUtil.getConnection();
@@ -89,11 +102,12 @@ public class UserDao {
             return ps.executeQuery().next();
 
         } catch (Exception e) {
-            System.out.println("❌ Database connection failed!");
+            logger.severe("Login error: " + e.getMessage());
             return false;
         }
     }
-    // UPDATE PROFILE
+
+    // ================= UPDATE PROFILE =================
     public boolean updateProfile(int userId, String name, String email) {
 
         String sql = "UPDATE users SET name=?, email=? WHERE user_id=?";
@@ -112,7 +126,7 @@ public class UserDao {
         }
     }
 
-    // VERIFY MASTER PASSWORD
+    // ================= VERIFY MASTER PASSWORD =================
     public boolean verifyMasterPassword(int userId, String password) {
 
         String sql = "SELECT * FROM users WHERE user_id=? AND password=?";
@@ -130,7 +144,7 @@ public class UserDao {
         }
     }
 
-    // FORGOT PASSWORD
+    // ================= FORGOT PASSWORD =================
     public boolean forgotPassword(String email, String answer, String newPassword) {
 
         String sql = "UPDATE users SET password=? WHERE email=? AND security_answer=?";
@@ -138,7 +152,7 @@ public class UserDao {
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(1, newPassword);
+            ps.setString(1, HashUtil.hash(newPassword)); // ✅ FIXED
             ps.setString(2, email);
             ps.setString(3, answer);
 

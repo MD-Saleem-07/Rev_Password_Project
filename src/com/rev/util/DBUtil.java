@@ -19,7 +19,7 @@ public class DBUtil {
                 );
             }
         } catch (Exception e) {
-            System.out.println("❌ Database connection failed!");
+            System.out.println("Database connection failed!");
             e.printStackTrace();
         }
         return con;

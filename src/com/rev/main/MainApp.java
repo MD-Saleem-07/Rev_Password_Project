@@ -12,8 +12,10 @@ import com.rev.util.VerificationUtil;
 
 public class MainApp {
 
+    
+    
     private static boolean isValidEmail(String email) {
-        return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+    	return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
     }
 
     public static void main(String[] args) {

@@ -8,7 +8,7 @@ import com.rev.model.PasswordEntry;
 
 public class PasswordDaoTest {
 
-    // ✅ Test 1: Add password (SAFE – unique ID)
+    //  Test 1: Add password (SAFE – unique ID)
     @Test
     public void testAddPassword() {
         PasswordDao dao = new PasswordDao();
@@ -25,7 +25,7 @@ public class PasswordDaoTest {
         assertNotNull(result);
     }
 
-    // ✅ Test 2: View passwords (safe, no assert)
+    //  Test 2: View passwords (safe, no assert)
     @Test
     public void testViewPasswords() {
         PasswordDao dao = new PasswordDao();
@@ -34,7 +34,7 @@ public class PasswordDaoTest {
         assertTrue(true); // test passes if no exception
     }
 
-    // ✅ Test 3: Search password (safe)
+    //  Test 3: Search password (safe)
     @Test
     public void testSearchByAccount() {
         PasswordDao dao = new PasswordDao();
@@ -43,7 +43,7 @@ public class PasswordDaoTest {
         assertTrue(true);
     }
 
-    // ✅ Test 4: Update password (safe)
+    //  Test 4: Update password (safe)
     @Test
     public void testUpdatePassword() {
         PasswordDao dao = new PasswordDao();
@@ -54,7 +54,7 @@ public class PasswordDaoTest {
     }
     
     
-//    ✅ TEST CASE 5: Delete Password (Safe)
+//     TEST CASE 5: Delete Password (Safe)
     @Test
     public void testDeletePassword() {
         PasswordDao dao = new PasswordDao();
@@ -68,7 +68,7 @@ public class PasswordDaoTest {
     }
     
     
-//    ✅ TEST CASE 6: Search with Non-Existing Account
+//     TEST CASE 6: Search with Non-Existing Account
     
     @Test
     public void testSearchWithInvalidAccount() {
@@ -78,7 +78,7 @@ public class PasswordDaoTest {
 
         assertTrue(true); // passes if no exception
     }
-//    ✅ TEST CASE 7: Update with Invalid Password ID
+//     TEST CASE 7: Update with Invalid Password ID
     @Test
     public void testUpdateInvalidPasswordId() {
         PasswordDao dao = new PasswordDao();
@@ -87,7 +87,7 @@ public class PasswordDaoTest {
 
         assertNotNull(result);
     }
-//    ✅ TEST CASE 8: Add Password With Random Data
+//     TEST CASE 8: Add Password With Random Data
     @Test
     public void testAddPasswordRandomData() {
         PasswordDao dao = new PasswordDao();
