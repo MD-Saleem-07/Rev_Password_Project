@@ -162,4 +162,21 @@ public class UserDao {
             return false;
         }
     }
+    
+    public boolean isSecurityAnswerCorrect(String email, String answer) {
+
+        String sql = "SELECT 1 FROM users WHERE email=? AND security_answer=?";
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ps.setString(2, answer);
+            return ps.executeQuery().next();
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 }

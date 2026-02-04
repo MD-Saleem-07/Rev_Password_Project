@@ -1,82 +1,79 @@
 package com.rev.main;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.rev.dao.PasswordDao;
-import com.rev.dao.UserDao;
+import com.rev.exception.InvalidInputException;
 import com.rev.model.PasswordEntry;
 import com.rev.model.User;
+import com.rev.service.PasswordService;
+import com.rev.service.UserService;
 import com.rev.util.PasswordUtil;
 import com.rev.util.VerificationUtil;
 
 public class MainApp {
 
-    
-    
-    private static boolean isValidEmail(String email) {
-    	return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
-    }
-
     public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
-        UserDao userDao = new UserDao();
-        PasswordDao passDao = new PasswordDao();
+        UserService userService = new UserService();
+        PasswordService passwordService = new PasswordService();
 
         while (true) {
             try {
                 System.out.println("\n===== REV PASSWORD MANAGER =====");
                 System.out.println("1. Register");
                 System.out.println("2. Login");
-                System.out.println("3. Forgot  Master Password");
+                System.out.println("3. Forgot Master Password");
                 System.out.println("4. Exit");
-                System.out.print("Enter choice: ");
+                System.out.print("Choice: ");
 
-                int choice = sc.nextInt();
-                sc.nextLine();
+                int choice = Integer.parseInt(sc.nextLine());
 
                 // ================= REGISTER =================
                 if (choice == 1) {
 
                     User u = new User();
 
-                    // USER ID CHECK
+                    // USER ID LOOP
                     while (true) {
                         System.out.print("User ID: ");
-                        int uid = sc.nextInt();
-                        sc.nextLine();
+                        String input = sc.nextLine();
 
-                        if (userDao.isUserIdExists(uid)) {
-                            System.out.println("❌ User ID already exists. Try another.");
-                        } else {
+                        try {
+                            int uid = Integer.parseInt(input);
+                            userService.validateUserId(uid);
                             u.setUserId(uid);
-                            break;
+                            break; // success → exit loop
+                        } catch (NumberFormatException e) {
+                            System.out.println("❌ User ID must be a number");
+                        } catch (InvalidInputException e) {
+                            System.out.println("❌ " + e.getMessage());
                         }
                     }
 
-                    System.out.print("Name: ");
-                    u.setName(sc.nextLine());
-
-                    // EMAIL CHECK
+                    // EMAIL LOOP
                     String email;
+
                     while (true) {
                         System.out.print("Email: ");
                         email = sc.nextLine();
 
-                        if (!isValidEmail(email)) {
-                            System.out.println("❌ Invalid email format!");
-                        } 
-                        else if (userDao.isEmailExists(email)) {
-                            System.out.println("❌ Email already registered!");
-                        }
-                        else {
+                        try {
+                            userService.validateEmail(email);
                             break;
+                        } catch (InvalidInputException e) {
+                            System.out.println("❌ " + e.getMessage());
                         }
                     }
-                    u.setEmail(email);
 
-                    System.out.print("Master Password : ");
+                    System.out.print("Password: ");
+                    String pass = sc.nextLine();
+
+                    userService.login(email, pass);
+                    System.out.println("✅ Login Successful");
+
+
+                    System.out.print("Password: ");
                     u.setPassword(sc.nextLine());
 
                     System.out.print("Security Question: ");
@@ -85,10 +82,8 @@ public class MainApp {
                     System.out.print("Security Answer: ");
                     u.setSecurityAnswer(sc.nextLine());
 
-                    if (userDao.registerUser(u))
-                        System.out.println("✅ Registration Successful");
-                    else
-                        System.out.println("❌ Registration Failed");
+                    userService.register(u);
+                    System.out.println("✅ Registration Successful");
                 }
 
                 // ================= LOGIN =================
@@ -97,193 +92,172 @@ public class MainApp {
                     System.out.print("Email: ");
                     String email = sc.nextLine();
 
-                    System.out.print("Master Password: ");
-                    String password = sc.nextLine();
+                    System.out.print("Password: ");
+                    String pass = sc.nextLine();
 
-                    if (!userDao.login(email, password)) {
-                        System.out.println("❌ Invalid Login");
-                        continue;
-                    }
-
+                    userService.login(email, pass);
                     System.out.println("✅ Login Successful");
 
                     while (true) {
-                        try {
-                            System.out.println("\n---- PASSWORD MENU ----");
-                            System.out.println("1. Add Password");
-                            System.out.println("2. View Passwords");
-                            System.out.println("3. View Password (Master Check)");
-                            System.out.println("4. Update Password");
-                            System.out.println("5. Update Profile");
-                            System.out.println("6. Forgot Password");
-                            System.out.println("7. Generate Password");
-                            System.out.println("8. Delete Password");
-                            System.out.println("9. Logout");
+                        System.out.println("\n---- PASSWORD MENU ----");
+                        System.out.println("1. Add Password");
+                        System.out.println("2. View Passwords");
+                        System.out.println("3. View Passwords (Master Check)");
+                        System.out.println("4. Update Password");
+                        System.out.println("5. Generate Password");
+                        System.out.println("6. Delete Password");
+                        System.out.println("7. Logout");
 
-                            int ch = sc.nextInt();
-                            sc.nextLine();
+                        int ch = Integer.parseInt(sc.nextLine());
 
-                            if (ch == 1) {
-                                PasswordEntry p = new PasswordEntry();
+                        if (ch == 1) {
 
-                                System.out.print("Password ID: ");
-                                p.setPasswordId(sc.nextInt());
-                                sc.nextLine();
+                            PasswordEntry p = new PasswordEntry();
 
-                                System.out.print("User ID: ");
-                                p.setUserId(sc.nextInt());
-                                sc.nextLine();
-
-                                System.out.print("Account Name: ");
-                                p.setAccountName(sc.nextLine());
-
-                                System.out.print("Username: ");
-                                p.setUsername(sc.nextLine());
-
-                                System.out.print("Password: ");
-                                p.setPassword(sc.nextLine());
-
-                                if (passDao.addPassword(p))
-                                    System.out.println("✅ Password Added");
-                                else
-                                    System.out.println("❌ Password already exists");
-                            }
-
-                            else if (ch == 2) {
-                                System.out.print("User ID: ");
-                                passDao.viewPasswords(sc.nextInt());
-                            }
-
-                            else if (ch == 3) {
-                                System.out.print("User ID: ");
-                                int uid = sc.nextInt();
-
-                                System.out.print("Master Password: ");
-                                String mp = sc.next();
-
-                                if (userDao.verifyMasterPassword(uid, mp))
-                                    passDao.viewPasswords(uid);
-                                else
-                                    System.out.println("❌ Invalid Master Password");
-                            }
-
-                            else if (ch == 4) {
-                                System.out.print("Password ID: ");
-                                int pid = sc.nextInt();
-
-                                System.out.print("New Password: ");
-                                passDao.updatePassword(pid, sc.next());
-                                System.out.println("✅ Password Updated");
-                            }
-
-                            else if (ch == 5) {
-                                System.out.print("User ID: ");
-                                int uid = sc.nextInt();
-
-                                System.out.print("New Name: ");
-                                String name = sc.next();
-
-                                System.out.print("New Email: ");
-                                String mail = sc.next();
-
-                                userDao.updateProfile(uid, name, mail);
-                                System.out.println("✅ Profile Updated");
-                            }
-
-                            else if (ch == 6) {
-                                System.out.print("Email: ");
-                                String mail = sc.next();
-
-                                System.out.print("Security Answer: ");
-                                String ans = sc.next();
-
-                                int code = VerificationUtil.generateCode();
-                                System.out.println("Verification Code: " + code);
-
-                                System.out.print("Enter Code: ");
-                                int userCode = sc.nextInt();
-
-                                if (code == userCode) {
-                                    System.out.print("New Password: ");
-                                    userDao.forgotPassword(mail, ans, sc.next());
-                                    System.out.println("✅ Password Reset Successful");
-                                } else {
-                                    System.out.println("❌ Invalid Code");
+                            // PASSWORD ID LOOP
+                            while (true) {
+                                try {
+                                    System.out.print("Password ID: ");
+                                    int pid = Integer.parseInt(sc.nextLine());
+                                    passwordService.validatePasswordId(pid);
+                                    p.setPasswordId(pid);
+                                    break;
+                                } catch (InvalidInputException e) {
+                                    System.out.println("❌ " + e.getMessage());
                                 }
                             }
 
-                            else if (ch == 7) {
-                                System.out.print("Enter length: ");
-                                System.out.println("Generated Password: " +
-                                        PasswordUtil.generatePassword(sc.nextInt()));
-                            }
+                            System.out.print("User ID: ");
+                            p.setUserId(Integer.parseInt(sc.nextLine()));
 
-                            else if (ch == 8) {
-                                System.out.print("Password ID: ");
-                                passDao.deletePassword(sc.nextInt());
-                                System.out.println("✅ Deleted");
-                            }
+                            System.out.print("Account Name: ");
+                            p.setAccountName(sc.nextLine());
 
-                            else if (ch == 9) {
-                                System.out.println("Logged out successfully.");
-                                break;
-                            }
+                            System.out.print("Username: ");
+                            p.setUsername(sc.nextLine());
 
-                            else {
-                                System.out.println("❌ Invalid option!");
-                            }
+                            System.out.print("Password: ");
+                            p.setPassword(sc.nextLine());
 
-                        } catch (InputMismatchException e) {
-                            System.out.println("❌ Enter numbers only!");
-                            sc.nextLine();
+                            passwordService.addPassword(p);
+                            System.out.println("✅ Password Added");
                         }
+
+                        else if (ch == 2) {
+                            System.out.print("User ID: ");
+                            passwordService.viewPasswords(
+                                    Integer.parseInt(sc.nextLine()));
+                        }
+
+                        else if (ch == 3) {
+                            System.out.print("User ID: ");
+                            int uid = Integer.parseInt(sc.nextLine());
+
+                            System.out.print("Master Password: ");
+                            String mp = sc.nextLine();
+
+                            userService.verifyMasterPassword(uid, mp);
+                            passwordService.viewPasswords(uid);
+                        }
+
+                        else if (ch == 4) {
+                            System.out.print("Password ID: ");
+                            int id = Integer.parseInt(sc.nextLine());
+
+                            System.out.print("New Password: ");
+                            String np = sc.nextLine();
+
+                            passwordService.updatePassword(id, np);
+                            System.out.println("✅ Password Updated");
+                        }
+
+                        else if (ch == 5) {
+                            System.out.print("Length: ");
+                            System.out.println("Generated: " +
+                                    PasswordUtil.generatePassword(
+                                            Integer.parseInt(sc.nextLine())));
+                        }
+
+                        else if (ch == 6) {
+                            System.out.print("Password ID: ");
+                            passwordService.deletePassword(
+                                    Integer.parseInt(sc.nextLine()));
+                            System.out.println("✅ Deleted");
+                        }
+
+                        else if (ch == 7) break;
                     }
                 }
 
-                // ================= FORGOT PASSWORD =================
+                // ================= FORGOT MASTER PASSWORD =================
+             // ===== FORGOT MASTER PASSWORD =====
                 else if (choice == 3) {
 
-                    System.out.println("\n--- Forgot Master Password ---");
+                    String email;
+                    String answer;
+                    int enteredOtp;
+                    int otp;
 
-                    System.out.print("Enter Registered Email: ");
-                    String email = sc.nextLine();
-
-                    System.out.print("Enter Security Answer: ");
-                    String answer = sc.nextLine();
-
-                    int code = VerificationUtil.generateCode();
-                    System.out.println("Verification Code: " + code);
-
-                    System.out.print("Enter Verification Code: ");
-                    int inputCode = sc.nextInt();
-                    sc.nextLine();
-
-                    if (code == inputCode) {
-                        System.out.print("Enter New Master Password: ");
-                        String newPass = sc.nextLine();
-
-                        if (userDao.forgotPassword(email, answer, newPass)) {
-                            System.out.println("✅ Master Password Reset Successfully");
-                        } else {
-                            System.out.println("❌ Details do not match. Try again.");
+                    // 🔁 EMAIL LOOP
+                    while (true) {
+                        try {
+                            System.out.print("Email: ");
+                            email = sc.nextLine();
+                            userService.validateEmailForForgot(email);
+                            break;
+                        } catch (InvalidInputException e) {
+                            System.out.println("❌ " + e.getMessage());
                         }
-                    } else {
-                        System.out.println("❌ Invalid Verification Code");
                     }
+
+                    // 🔁 SECURITY ANSWER LOOP
+                    while (true) {
+                        try {
+                            System.out.print("Security Answer: ");
+                            answer = sc.nextLine();
+                            userService.validateSecurityAnswer(email, answer);
+                            break;
+                        } catch (InvalidInputException e) {
+                            System.out.println("❌ " + e.getMessage());
+                        }
+                    }
+
+                    otp = VerificationUtil.generateCode();
+                    System.out.println("OTP: " + otp);
+
+                    // 🔁 OTP LOOP
+                    while (true) {
+                        try {
+                            System.out.print("Enter OTP: ");
+                            enteredOtp = Integer.parseInt(sc.nextLine());
+                            userService.validateOtp(enteredOtp, otp);
+                            break;
+                        } catch (NumberFormatException e) {
+                            System.out.println("❌ OTP must be a number");
+                        } catch (InvalidInputException e) {
+                            System.out.println("❌ " + e.getMessage());
+                        }
+                    }
+
+                    System.out.print("New Password: ");
+                    String newPass = sc.nextLine();
+
+                    userService.forgotMasterPassword(
+                            email, answer, enteredOtp, otp, newPass);
+
+                    System.out.println("✅ Master Password Reset Successful");
                 }
 
+
                 else if (choice == 4) {
-                    System.out.println("Thank you for using Rev Password Manager!");
+                    System.out.println("Thank you!");
                     break;
                 }
 
-                else {
-                    System.out.println("❌ Invalid menu choice!");
-                }
-
-            } catch (InputMismatchException e) {
-                System.out.println("❌ Please enter valid number!");
-                sc.nextLine();
+            } catch (InvalidInputException e) {
+                System.out.println("❌ " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("❌ Invalid input");
             }
         }
     }

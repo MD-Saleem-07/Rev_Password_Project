@@ -9,6 +9,23 @@ public class User {
     private String securityQuestion;
     private String securityAnswer;
 
+    
+    public User() {
+    	
+    }
+
+    // ✅ Parameterized constructor (ADD THIS)
+    public User(int userId, String name, String email,
+                String password, String securityQuestion,
+                String securityAnswer) {
+
+        this.userId = userId;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.securityQuestion = securityQuestion;
+        this.securityAnswer = securityAnswer;
+    }
     public int getUserId() {
         return userId;
     }

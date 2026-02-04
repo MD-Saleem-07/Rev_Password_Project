@@ -118,6 +118,19 @@ public class PasswordDao {
             return false;
         }
     }
+    public boolean isPasswordIdExists(int passwordId) {
+        String sql = "SELECT 1 FROM passwords WHERE password_id=?";
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, passwordId);
+            return ps.executeQuery().next();
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
 	
 }
